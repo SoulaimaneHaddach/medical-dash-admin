@@ -15,7 +15,7 @@ import DashboardLayout from '@/components/Layout'
 
 const { Content } = Layout
 
-// Mock data
+// mock data
 const mockStats = {
   totalDoctors: 45,
   todayBookings: 12,
