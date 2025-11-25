@@ -1,0 +1,171 @@
+{
+  "login": {
+    "success": "Connecté avec succès",
+    "invalid": "Identifiants incorrects",
+    "error": "Une erreur est survenue lors de la connexion",
+    "title": "Tableau de bord Admin",
+    "subtitle": "Connectez-vous pour continuer",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mot de passe",
+    "signIn": "Se connecter",
+    "demo": "Pour demo: admin@hospital.com / admin123",
+    "validation": {
+      "emailRequired": "Veuillez entrer votre email",
+      "emailInvalid": "Adresse email invalide",
+      "passwordRequired": "Veuillez entrer votre mot de passe",
+      "passwordMin": "Le mot de passe doit contenir au moins 6 caractères"
+    }
+  },
+  "users": {
+    "user": "Utilisateur",
+    "phone": "Téléphone",
+    "status": "Statut",
+    "filter": "Filtrer par statut",
+    "searchPlaceholder": "Rechercher un utilisateur (nom, email, téléphone)...",
+    "all": "Tous les statuts",
+    "active": "Actif",
+    "banned": "Banni",
+    "pending": "En attente",
+    "bookings": "Réservations",
+    "joinedDate": "Date d'inscription",
+    "actions": {
+      "view": "Voir",
+      "ban": "Bannir",
+      "unban": "Débannir"
+    },
+    "showTotal": "Total {total} utilisateurs"
+  },
+  "specialties": {
+    "icon": "Icône",
+    "value": "Valeur",
+    "english": "Anglais",
+    "french": "Français",
+    "arabic": "Arabe",
+    "category": "Catégorie",
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "add": "Ajouter une spécialité",
+    "addNew": "Ajouter une nouvelle spécialité",
+    "editTitle": "Modifier la spécialité",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "deleteConfirmTitle": "Êtes-vous sûr de vouloir supprimer cette spécialité?",
+    "deleteConfirmContent": "Cette action est irréversible",
+    "deleted": "Spécialité supprimée avec succès",
+    "updated": "Spécialité mise à jour avec succès",
+    "added": "Spécialité ajoutée avec succès",
+    "fillFields": "Veuillez remplir tous les champs requis",
+    "labels": {
+      "value": "Valeur",
+      "nameEn": "Nom (Anglais)",
+      "nameFr": "Nom (Français)",
+      "nameAr": "Nom (Arabe)",
+      "category": "Catégorie",
+      "icon": "Icône (Emoji)"
+    }
+    ,
+    "categories": {
+      "medical": "Médical",
+      "surgical": "Chirurgical"
+    },
+    "placeholders": {
+      "value": "cardiology",
+      "exampleEn": "Cardiology",
+      "exampleFr": "Cardiologie",
+      "exampleAr": "Cardiology",
+      "category": "médical"
+    }
+  },
+  "layout": {
+    "controlPanel": "Panneau de contrôle",
+    "doctors": "Médecins",
+    "bookings": "Réservations",
+    "users": "Utilisateurs",
+    "specialties": "Spécialités",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter",
+    "admin": "Admin",
+    "adminDashboard": "Tableau de bord Admin",
+    "language": "Langue",
+    "management": "Gestion"
+  }
+  ,
+  "dashboard": {
+    "cards": {
+      "totalDoctors": "Total des médecins",
+      "todaysBookings": "Réservations d'aujourd'hui",
+      "pendingApprovals": "Approbations en attente",
+      "totalBookings": "Total des réservations"
+    },
+    "tables": {
+      "recentBookings": "Réservations récentes",
+      "pendingDoctors": "Médecins en attente"
+    },
+    "columns": {
+      "patient": "Patient",
+      "doctor": "Médecin",
+      "date": "Date",
+      "status": "Statut",
+      "name": "Nom",
+      "specialty": "Spécialité",
+      "actions": "Actions"
+    },
+    "viewAll": "voir tout",
+    "actions": {
+      "approve": "Approuver",
+      "reject": "Rejeter"
+    }
+  },
+  "doctors": {
+    "columns": {
+      "name": "Médecin",
+      "specialty": "Spécialité",
+      "status": "Statut",
+      "bookings": "Réservations"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "searchPlaceholder": "rechercher un médecin...",
+    "add": "Ajouter un médecin",
+    "messages": {
+      "approved": "Le médecin a été approuvé",
+      "rejected": "Le médecin a été rejeté",
+      "error": "Une erreur est survenue"
+    }
+  },
+  "bookings": {
+    "columns": {
+      "number": "Numéro de réservation",
+      "patient": "Patient",
+      "doctor": "Médecin",
+      "date": "Date",
+      "time": "Heure",
+      "specialty": "Spécialité",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "status": {
+      "confirmed": "Confirmé",
+      "pending": "En attente",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "all": "Tous les statuts"
+    },
+    "placeholders": {
+      "search": "Recherche d'une réservation...",
+      "filter": "Filtrer par statut",
+      "fromDate": "Date de",
+      "toDate": "Date à"
+    },
+    "actions": {
+      "export": "Exporter CSV",
+      "view": "Voir",
+      "edit": "Modifier"
+    },
+    "showTotal": "Total {total} réservations"
+  }
+}

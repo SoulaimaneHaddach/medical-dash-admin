@@ -1,0 +1,176 @@
+{
+  "login": {
+    "success": "تم تسجيل الدخول بنجاح",
+    "invalid": "بيانات الدخول غير صحيحة",
+    "error": "حدث خطأ في تسجيل الدخول",
+    "title": "لوحة تحكم الإدمن",
+    "subtitle": "تسجيل الدخول للمتابعة",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "passwordPlaceholder": "كلمة المرور",
+    "signIn": "تسجيل الدخول",
+    "demo": "للتجربة: admin@hospital.com / admin123",
+    "validation": {
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني",
+      "emailInvalid": "البريد الإلكتروني غير صحيح",
+      "passwordRequired": "الرجاء إدخال كلمة المرور",
+      "passwordMin": "كلمة المرور يجب أن تكون 6 أحرف على الأقل"
+    }
+  },
+  "users": {
+    "user": "المستخدم",
+    "phone": "رقم الهاتف",
+    "status": "الحالة",
+    "filter": "تصفية حسب الحالة",
+    "searchPlaceholder": "البحث عن مستخدم (الاسم، البريد، الهاتف)...",
+    "all": "جميع الحالات",
+    "active": "نشط",
+    "banned": "محظور",
+    "pending": "قيد الانتظار",
+    "bookings": "عدد الحجوزات",
+    "joinedDate": "تاريخ التسجيل",
+    "actions": {
+      "view": "عرض",
+      "ban": "حظر",
+      "unban": "إلغاء الحظر"
+    },
+    "showTotal": "إجمالي {total} مستخدم"
+  },
+  "specialties": {
+    "icon": "الأيقونة",
+    "value": "القيمة",
+    "english": "الإنجليزية",
+    "french": "الفرنسية",
+    "arabic": "العربية",
+    "category": "الفئة",
+    "actions": {
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "add": "إضافة تخصص",
+    "addNew": "إضافة تخصص جديد",
+    "editTitle": "تعديل التخصص",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "deleteConfirmTitle": "هل أنت متأكد من حذف هذا التخصص؟",
+    "deleteConfirmContent": "لا يمكن التراجع عن هذا الإجراء",
+    "deleted": "تم حذف التخصص بنجاح",
+    "updated": "تم تحديث التخصص بنجاح",
+    "added": "تم إضافة التخصص بنجاح",
+    "fillFields": "الرجاء ملء جميع الحقول المطلوبة",
+    "labels": {
+      "value": "القيمة",
+      "nameEn": "الاسم بالإنجليزية",
+      "nameFr": "الاسم بالفرنسية",
+      "nameAr": "الاسم بالعربية",
+      "category": "الفئة",
+      "icon": "الأيقونة (رمز تعبيري)"
+    }
+    ,
+    "categories": {
+      "medical": "طبي",
+      "surgical": "جراحي"
+    },
+    "placeholders": {
+      "value": "cardiology",
+      "exampleEn": "Cardiology",
+      "exampleFr": "Cardiologie",
+      "exampleAr": "Cardiology",
+      "category": "طبي"
+    }
+  },
+  "layout": {
+    "controlPanel": "لوحة التحكم",
+    "doctors": "الأطباء",
+    "bookings": "الحجوزات",
+    "users": "المستخدمون",
+    "specialties": "التخصصات",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "admin": "الإدمن",
+    "adminDashboard": "لوحة تحكم الإدمن",
+    "language": "اللغة",
+    "management": "الإدارة"
+  }
+  ,
+  "common": {
+    "success": "تمت العملية بنجاح",
+    "connectionError": "حدث خطأ في الاتصال"
+  }
+  ,
+  "dashboard": {
+    "cards": {
+      "totalDoctors": "إجمالي الأطباء",
+      "todaysBookings": "حجوزات اليوم",
+      "pendingApprovals": "الموافقات المعلقة",
+      "totalBookings": "إجمالي الحجوزات"
+    },
+    "tables": {
+      "recentBookings": "الحجوزات الحديثة",
+      "pendingDoctors": "الأطباء المعلقون"
+    },
+    "columns": {
+      "patient": "المريض",
+      "doctor": "الطبيب",
+      "date": "التاريخ",
+      "status": "الحالة",
+      "name": "الاسم",
+      "specialty": "التخصص",
+      "actions": "الإجراءات"
+    },
+    "viewAll": "عرض الكل",
+    "actions": {
+      "approve": "الموافقة",
+      "reject": "رفض"
+    }
+  },
+  "doctors": {
+    "columns": {
+      "name": "الطبيب",
+      "specialty": "التخصص",
+      "status": "الحالة",
+      "bookings": "الحجوزات"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "searchPlaceholder": "البحث عن طبيب...",
+    "add": "إضافة طبيب",
+    "messages": {
+      "approved": "تمت الموافقة على الطبيب",
+      "rejected": "تم رفض الطبيب",
+      "error": "حدث خطأ"
+    }
+  },
+  "bookings": {
+    "columns": {
+      "number": "رقم الحجز",
+      "patient": "المريض",
+      "doctor": "الطبيب",
+      "date": "التاريخ",
+      "time": "الوقت",
+      "specialty": "التخصص",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "confirmed": "مؤكد",
+      "pending": "قيد الانتظار",
+      "completed": "مكتمل",
+      "cancelled": "ملغى",
+      "all": "جميع الحالات"
+    },
+    "placeholders": {
+      "search": "البحث عن حجز...",
+      "filter": "تصفية حسب الحالة",
+      "fromDate": "من التاريخ",
+      "toDate": "إلى التاريخ"
+    },
+    "actions": {
+      "export": "تصدير CSV",
+      "view": "عرض",
+      "edit": "تعديل"
+    },
+    "showTotal": "إجمالي {total} حجز"
+  }
+}
