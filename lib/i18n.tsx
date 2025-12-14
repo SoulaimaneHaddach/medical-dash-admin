@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react'
 import en from '../locales/en.json'
 import ar from '../locales/ar.json'
@@ -32,7 +33,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     setLocaleState(l)
     try {
       if (typeof window !== 'undefined') localStorage.setItem('locale', l)
-    } catch (e) {}
+    } catch {}
   }
 
   // On client hydrate, read persisted locale and apply it. This runs only
@@ -41,23 +42,24 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     try {
       const stored = localStorage.getItem('locale') as LocaleKey | null
       if (stored && stored !== locale) setLocaleState(stored)
-    } catch (e) {}
+    } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const t = (key: string, params?: Record<string, any>) => {
-    const dict = translations[locale] || {}
-    const value = lookup(dict, key)
-    let str = typeof value === 'string' ? value : key
-    if (params) {
-      Object.keys(params).forEach((p) => {
-        str = str.replace(new RegExp(`\\{${p}\\}`, 'g'), String(params[p]))
-      })
+  const value = useMemo(() => {
+    const t = (key: string, params?: Record<string, any>) => {
+      const dict = translations[locale] || {}
+      const value = lookup(dict, key)
+      let str = typeof value === 'string' ? value : key
+      if (params) {
+        Object.keys(params).forEach((p) => {
+          str = str.replace(new RegExp(`\\{${p}\\}`, 'g'), String(params[p]))
+        })
+      }
+      return str
     }
-    return str
-  }
-
-  const value = useMemo(() => ({ locale, setLocale, t }), [locale])
+    return { locale, setLocale, t }
+  }, [locale])
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }

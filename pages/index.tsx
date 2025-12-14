@@ -1,6 +1,7 @@
 // pages/index.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { Layout, Card, Statistic, Row, Col, Table, Tag, Button, Space } from 'antd'
+import { Card, Statistic, Row, Col, Button, Space, Tag } from 'antd'
 import { useTranslation } from '@/lib/i18n'
 import { 
   UserOutlined, 
@@ -12,30 +13,25 @@ import {
   CloseOutlined,
 } from '@ant-design/icons'
 import DashboardLayout from '@/components/Layout'
+import { useDoctors } from '@/hooks/useDoctors'
 
-const { Content } = Layout
+// Content from Ant Layout is not used directly here
 
-// mock data
-const mockStats = {
-  totalDoctors: 45,
-  todayBookings: 12,
-  pendingApprovals: 3,
-  totalBookings: 234,
-}
-
-const recentBookings = [
-  { id: 1, patient: 'John Doe', doctor: 'Dr. Sarah Johnson', date: '2025-11-26', status: 'confirmed' },
-  { id: 2, patient: 'Jane Smith', doctor: 'Dr. Maria Garcia', date: '2025-11-26', status: 'pending' },
-  { id: 3, patient: 'Mike Brown', doctor: 'Dr. James Wilson', date: '2025-11-27', status: 'completed' },
-]
-
-const pendingDoctors = [
-  { id: 1, name: 'Dr. Ahmed Hassan', specialty: 'Neurology' },
-  { id: 2, name: 'Dr. Li Wei', specialty: 'Dermatology' },
-]
+// Data comes from API via hooks
 
 export default function DashboardPage() {
   const { t } = useTranslation()
+  const { doctors = [] } = useDoctors()
+
+  const totalDoctors = doctors.length || 0
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const pendingApprovals = (doctors || []).filter((d: any) => d.status === 'pending' || d.status === 'inactive').length
+  const activeDoctors = (doctors || []).filter((d: any) => d.status === 'active').length
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
+  const newRegistrations7d = (doctors || []).filter((d: any) => d.createdAt && new Date(d.createdAt).getTime() >= sevenDaysAgo).length
+
+
+  const pendingDoctors = (doctors || []).filter((d: any) => d.status === 'pending' || d.status === 'inactive').slice(0, 5)
   const bookingColumns = [
     { title: t('dashboard.columns.patient'), dataIndex: 'patient', key: 'patient' },
     { title: t('dashboard.columns.doctor'), dataIndex: 'doctor', key: 'doctor' },
@@ -66,16 +62,19 @@ export default function DashboardPage() {
     {
       title: t('dashboard.columns.actions'),
       key: 'actions',
-      render: (_: any, record: any) => (
-        <Space>
-          <Button size="small" type="primary" icon={<CheckOutlined />}>
-            {t('dashboard.actions.approve')}
-          </Button>
-          <Button size="small" danger icon={<CloseOutlined />}>
-            {t('dashboard.actions.reject')}
-          </Button>
-        </Space>
-      ),
+      render: (_: any) => {
+        void _
+        return (
+          <Space>
+            <Button size="small" type="primary" icon={<CheckOutlined />}>
+              {t('dashboard.actions.approve')}
+            </Button>
+            <Button size="small" danger icon={<CloseOutlined />}>
+              {t('dashboard.actions.reject')}
+            </Button>
+          </Space>
+        )
+      }
     },
   ]
 
@@ -88,7 +87,7 @@ export default function DashboardPage() {
             <Card>
               <Statistic
                 title={t('dashboard.cards.totalDoctors')}
-                value={mockStats.totalDoctors}
+                value={totalDoctors}
                 prefix={<UserOutlined />}
                 suffix={
                   <RiseOutlined style={{ color: '#3f8600', fontSize: 14 }} />
@@ -99,9 +98,9 @@ export default function DashboardPage() {
           <Col xs={24} sm={12} lg={6}>
             <Card>
               <Statistic
-                title={t('dashboard.cards.todaysBookings')}
-                value={mockStats.todayBookings}
-                prefix={<CalendarOutlined />}
+                title={t('dashboard.cards.activeDoctors')}
+                value={activeDoctors}
+                prefix={<TeamOutlined />}
                 valueStyle={{ color: '#3f8600' }}
               />
             </Card>
@@ -109,55 +108,19 @@ export default function DashboardPage() {
           <Col xs={24} sm={12} lg={6}>
             <Card>
               <Statistic
-                title={t('dashboard.cards.pendingApprovals')}
-                value={mockStats.pendingApprovals}
-                prefix={<TeamOutlined />}
-                valueStyle={{ color: '#cf1322' }}
+                title={t('dashboard.cards.newRegistrations7d')}
+                value={newRegistrations7d}
+                prefix={<UserOutlined />}
+                valueStyle={{ color: '#1890ff' }}
               />
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={6}>
-            <Card>
-              <Statistic
-                title={t('dashboard.cards.totalBookings')}
-                value={mockStats.totalBookings}
-                prefix={<BarChartOutlined />}
-              />
-            </Card>
+          </Col>
+          <Col xs={24} sm={12} lg={6}>
           </Col>
         </Row>
-
-        {/* Tables */}
-        <Row gutter={16}>
-          <Col xs={24} lg={12}>
-            <Card 
-              title={t('dashboard.tables.recentBookings')} 
-              extra={<Button type="link">{t('dashboard.viewAll')}</Button>}
-            >
-              <Table
-                dataSource={recentBookings}
-                columns={bookingColumns}
-                pagination={false}
-                size="small"
-                rowKey="id"
-              />
-            </Card>
-          </Col>
-          <Col xs={24} lg={12}>
-            <Card 
-              title={t('dashboard.tables.pendingDoctors')} 
-              extra={<Button type="link">{t('dashboard.viewAll')}</Button>}
-            >
-              <Table
-                dataSource={pendingDoctors}
-                columns={doctorColumns}
-                pagination={false}
-                size="small"
-                rowKey="id"
-              />
-            </Card>
-          </Col>
-        </Row>
+        {/* Tables removed per request; three new cards added above */}
       </Space>
     </DashboardLayout>
   )

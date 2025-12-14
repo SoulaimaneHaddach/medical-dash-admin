@@ -33,11 +33,13 @@
       "ban": "Ban",
       "unban": "Unban"
     },
+    "actionsLabel": "Actions",
     "showTotal": "Total {total} users"
   },
   "specialties": {
     "icon": "Icon",
     "value": "Value",
+    "description": "Description",
     "english": "English",
     "french": "French",
     "arabic": "Arabic",
@@ -60,6 +62,8 @@
     "labels": {
       "value": "Value",
       "nameEn": "Name (English)",
+      "name": "Name",
+      "description": "Description",
       "nameFr": "Name (French)",
       "nameAr": "Name (Arabic)",
       "category": "Category",
@@ -70,13 +74,24 @@
       "medical": "Medical",
       "surgical": "Surgical"
     },
+    "actionsLabel": "Actions",
     "placeholders": {
       "value": "cardiology",
       "exampleEn": "Cardiology",
       "exampleFr": "Cardiologie",
       "exampleAr": "Cardiology",
+      "description": "Optional description",
       "category": "medical"
     }
+    ,
+    "addMultiple": "Add Multiple",
+    "addMultipleTitle": "Add Multiple Specialties",
+    "multiEmpty": "No specialties provided",
+    "duplicatesWarning": "The following specialties are already added:",
+    "saveAll": "Save All",
+    "multiLabel": "Enter one specialty name per line",
+    "multiPlaceholder": "Cardiology\nDermatology\nNeurology",
+    "processing": "Processing..."
   },
   "layout": {
     "controlPanel": "Control Panel",
@@ -94,13 +109,18 @@
   ,
   "common": {
     "success": "Operation completed successfully",
+    "back": "Back",
+    "actions": "Actions",
+    "delete": "Delete",
     "connectionError": "An error occurred while connecting"
   }
   ,
   "dashboard": {
     "cards": {
       "totalDoctors": "Total Doctors",
-      "todaysBookings": "Today's Bookings",
+      "activeDoctors": "Active Doctors",
+      "newRegistrations7d": "New Registrations (7d)",
+      "openAppointments": "Open Appointments",
       "pendingApprovals": "Pending Approvals",
       "totalBookings": "Total Bookings"
     },
@@ -136,11 +156,32 @@
     },
     "searchPlaceholder": "search for a doctor...",
     "add": "Add a doctor",
+    "viewAll": "View all doctors",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "specialty": "Specialty",
+      "submit": "Create"
+    },
     "messages": {
       "approved": "The doctor has been approved",
+      "created": "Doctor created successfully",
       "rejected": "The doctor has been rejected",
       "error": "An error occurred"
     }
+    ,
+    "actions": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "show": "Show",
+      "hide": "Hide"
+    },
+    "confirmRejectTitle": "Confirm reject",
+    "confirmRejectContent": "Are you sure you want to reject this doctor?"
+  },
+  "confirm": {
+    "rejectTitle": "Confirm reject",
+    "rejectContent": "Are you sure you want to reject this doctor?"
   },
   "bookings": {
     "columns": {

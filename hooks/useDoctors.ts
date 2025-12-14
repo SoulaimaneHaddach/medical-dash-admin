@@ -17,44 +17,81 @@ export function useDoctors() {
 
   // Doctor's approval
   const approveMutation = useMutation({
-    mutationFn: (id: number) => doctorsAPI.approve(id.toString()),
+    mutationFn: (id: string) => doctorsAPI.approve(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctors'] });
       let locale: LocaleKey = 'en'
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
         if (stored) locale = stored
-      } catch (e) {}
+      } catch {}
       message.success(tSync('doctors.messages.approved', locale))
     },
-    onError: () => {
+    onError: (err) => {
+      if (typeof console !== 'undefined') console.error('Approve doctor error', err)
       let locale: LocaleKey = 'en'
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
         if (stored) locale = stored
-      } catch (e) {}
+      } catch {}
       message.error(tSync('doctors.messages.error', locale))
     },
   });
 
 // Doctor refused
   const rejectMutation = useMutation({
-    mutationFn: (id: number) => doctorsAPI.reject(id.toString()),
+    mutationFn: (id: string) => doctorsAPI.reject(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctors'] });
       let locale: LocaleKey = 'en'
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
         if (stored) locale = stored
-      } catch (e) {}
+      } catch {}
       message.success(tSync('doctors.messages.rejected', locale))
+    },
+    onError: (err) => {
+      if (typeof console !== 'undefined') console.error('Reject doctor error', err)
+      let locale: LocaleKey = 'en'
+      try {
+        const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
+        if (stored) locale = stored
+      } catch {}
+      message.error(tSync('doctors.messages.error', locale))
+    },
+  });
+
+  // Delete doctor
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => doctorsAPI.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['doctors'] });
+      let locale: LocaleKey = 'en'
+      try {
+        const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
+        if (stored) locale = stored
+      } catch {}
+      message.success(tSync('doctors.messages.deleted', locale))
+    },
+    onError: (err) => {
+      if (typeof console !== 'undefined') console.error('Delete doctor error', err)
+      let locale: LocaleKey = 'en'
+      try {
+        const stored = typeof window !== 'undefined' ? localStorage.getItem('locale') as LocaleKey | null : null
+        if (stored) locale = stored
+      } catch {}
+      message.error(tSync('doctors.messages.error', locale))
     },
   });
 
   return {
     doctors,
     isLoading,
-    approve: approveMutation.mutate,
-    reject: rejectMutation.mutate,
+    approve: (id: string) => approveMutation.mutateAsync(id),
+    reject: (id: string) => rejectMutation.mutateAsync(id),
+    approveLoading: (approveMutation as any).isLoading,
+    rejectLoading: (rejectMutation as any).isLoading,
+    delete: (id: string) => deleteMutation.mutateAsync(id),
+    deleteLoading: (deleteMutation as any).isLoading,
   };
 }

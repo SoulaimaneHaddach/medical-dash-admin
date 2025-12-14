@@ -3,7 +3,7 @@
     "success": "تم تسجيل الدخول بنجاح",
     "invalid": "بيانات الدخول غير صحيحة",
     "error": "حدث خطأ في تسجيل الدخول",
-    "title": "لوحة تحكم الإدمن",
+    "title": "لوحة تحكم",
     "subtitle": "تسجيل الدخول للمتابعة",
     "emailPlaceholder": "البريد الإلكتروني",
     "passwordPlaceholder": "كلمة المرور",
@@ -33,11 +33,13 @@
       "ban": "حظر",
       "unban": "إلغاء الحظر"
     },
+    "actionsLabel": "الإجراءات",
     "showTotal": "إجمالي {total} مستخدم"
   },
   "specialties": {
     "icon": "الأيقونة",
     "value": "القيمة",
+    "description": "الوصف",
     "english": "الإنجليزية",
     "french": "الفرنسية",
     "arabic": "العربية",
@@ -59,6 +61,8 @@
     "fillFields": "الرجاء ملء جميع الحقول المطلوبة",
     "labels": {
       "value": "القيمة",
+      "name": "الاسم",
+      "description": "الوصف",
       "nameEn": "الاسم بالإنجليزية",
       "nameFr": "الاسم بالفرنسية",
       "nameAr": "الاسم بالعربية",
@@ -70,13 +74,24 @@
       "medical": "طبي",
       "surgical": "جراحي"
     },
+    "actionsLabel": "الإجراءات",
     "placeholders": {
       "value": "cardiology",
       "exampleEn": "Cardiology",
       "exampleFr": "Cardiologie",
       "exampleAr": "Cardiology",
+      "description": "وصف اختياري",
       "category": "طبي"
     }
+    ,
+    "addMultiple": "إضافة متعددة",
+    "addMultipleTitle": "إضافة تخصصات متعددة",
+    "multiEmpty": "لم يتم إدخال أي تخصصات",
+    "duplicatesWarning": "التخصصات التالية موجودة بالفعل:",
+    "saveAll": "حفظ الكل",
+    "multiLabel": "أدخل اسم تخصص واحد في كل سطر",
+    "multiPlaceholder": "Cardiology\nDermatology\nNeurology",
+    "processing": "جارِ المعالجة..."
   },
   "layout": {
     "controlPanel": "لوحة التحكم",
@@ -86,23 +101,28 @@
     "specialties": "التخصصات",
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج",
-    "admin": "الإدمن",
-    "adminDashboard": "لوحة تحكم الإدمن",
+    "admin": "مسؤول",
+    "adminDashboard": "لوحة تحكم ",
     "language": "اللغة",
     "management": "الإدارة"
   }
   ,
   "common": {
     "success": "تمت العملية بنجاح",
+    "actions": "الإجراءات",
+    "delete": "حذف",
     "connectionError": "حدث خطأ في الاتصال"
   }
   ,
   "dashboard": {
     "cards": {
-      "totalDoctors": "إجمالي الأطباء",
-      "todaysBookings": "حجوزات اليوم",
-      "pendingApprovals": "الموافقات المعلقة",
-      "totalBookings": "إجمالي الحجوزات"
+        "totalDoctors": "إجمالي الأطباء",
+        "activeDoctors": "الأطباء النشطون",
+        "newRegistrations7d": "التسجيلات الجديدة (7 أيام)",
+        "openAppointments": "المواعيد المفتوحة",
+        "todaysBookings": "حجوزات اليوم",
+        "recentBookings": "الحجوزات الحديثة",
+        "pendingDoctors": "الأطباء المعلقون"
     },
     "tables": {
       "recentBookings": "الحجوزات الحديثة",
@@ -140,6 +160,13 @@
       "approved": "تمت الموافقة على الطبيب",
       "rejected": "تم رفض الطبيب",
       "error": "حدث خطأ"
+    }
+    ,
+    "actions": {
+      "approve": "الموافقة",
+      "reject": "رفض",
+      "show": "عرض",
+      "hide": "إخفاء"
     }
   },
   "bookings": {
