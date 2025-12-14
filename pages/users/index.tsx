@@ -1,52 +1,67 @@
 // pages/users/index.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
 import { Table, Button, Input, Space, Tag, Avatar, Row, Col, Select } from 'antd'
 import { SearchOutlined, UserOutlined, LockOutlined, UnlockOutlined, EyeOutlined } from '@ant-design/icons'
 import DashboardLayout from '@/components/Layout'
 import { useTranslation } from '@/lib/i18n'
 import type { ColumnsType } from 'antd/es/table'
+import { useUsers } from '@/hooks/useUsers'
+import { extractRolesFromUser } from '@/lib/auth'
 
 interface User {
   id: number
   name: string
   email: string
-  phone: string
-  status: 'active' | 'banned' | 'pending'
-  bookings: number
-  joinedDate: string
+  // phone removed per request
+  // status replaced by role in the public listing
+  role?: string
+  bookings?: number
+  joinedDate?: string
+  createdAt?: string
 }
-
-const mockUsers: User[] = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', phone: '+1234567890', status: 'active', bookings: 5, joinedDate: '2024-01-15' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '+1234567891', status: 'active', bookings: 8, joinedDate: '2024-02-20' },
-  { id: 3, name: 'Mike Brown', email: 'mike@example.com', phone: '+1234567892', status: 'banned', bookings: 2, joinedDate: '2024-03-10' },
-  { id: 4, name: 'Sarah Davis', email: 'sarah@example.com', phone: '+1234567893', status: 'active', bookings: 12, joinedDate: '2024-01-05' },
-  { id: 5, name: 'Ahmed Ali', email: 'ahmed@example.com', phone: '+1234567894', status: 'pending', bookings: 0, joinedDate: '2024-11-20' },
-]
 
 export default function UsersPage() {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [users, setUsers] = useState(mockUsers)
+  const [roleFilter, setRoleFilter] = useState<string>('all')
+  const { users = [], ban, unban } = useUsers()
 
   const handleBanUser = (id: number) => {
-    setUsers(users.map(u => u.id === id ? { ...u, status: 'banned' as const } : u))
+    ban(id)
   }
 
   const handleUnbanUser = (id: number) => {
-    setUsers(users.map(u => u.id === id ? { ...u, status: 'active' as const } : u))
+    unban(id)
   }
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchText.toLowerCase()) ||
-      user.phone.includes(searchText)
-    
-    const matchesStatus = statusFilter === 'all' || user.status === statusFilter
+  function resolveJoined(u: any) {
+    const candidates = [u?.joinedDate, u?.createdAt, u?.joined_at, u?.created_at]
+    for (const c of candidates) {
+      if (c) return c
+    }
+    return undefined
+  }
 
-    return matchesSearch && matchesStatus
+  function resolveRole(u: any) {
+    try {
+      const roles = extractRolesFromUser(u)
+      if (!roles || roles.length === 0) return 'USER'
+      return String(roles[0]).toUpperCase()
+    } catch (e) {
+      return 'USER'
+    }
+  }
+
+  const filteredUsers = (users || []).filter((user: any) => {
+    const matchesSearch =
+      (user.name || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (user.email || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      (String((extractRolesFromUser(user)[0]) || '')).toLowerCase().includes(searchText.toLowerCase())
+
+    const matchesRole = roleFilter === 'all' || (extractRolesFromUser(user).includes(roleFilter))
+
+    return matchesSearch && matchesRole
   })
 
   const columns: ColumnsType<User> = [
@@ -66,48 +81,31 @@ export default function UsersPage() {
       ),
     },
     {
-      title: t('users.phone'),
-      dataIndex: 'phone',
-      key: 'phone',
-    },
-    {
-      title: t('users.status'),
-      dataIndex: 'status',
-      key: 'status',
-      filters: [
-        { text: t('users.active'), value: 'active' },
-        { text: t('users.banned'), value: 'banned' },
-        { text: t('users.pending'), value: 'pending' },
-      ],
-      onFilter: (value, record) => record.status === value,
-      render: (status: string) => {
-        const colors: Record<string, string> = {
-          active: 'green',
-          banned: 'red',
-          pending: 'orange',
-        }
-        const labels: Record<string, string> = {
-          active: t('users.active'),
-          banned: t('users.banned'),
-          pending: t('users.pending'),
-        }
-        return <Tag color={colors[status]}>{labels[status]}</Tag>
-      },
-    },
-    {
-      title: t('users.bookings'),
-      dataIndex: 'bookings',
-      key: 'bookings',
-      sorter: (a, b) => a.bookings - b.bookings,
+      title: t('users.role') || 'Role',
+      key: 'role',
+      render: (_, record) => {
+        const r = resolveRole(record) || 'USER'
+        const colors: Record<string, string> = { ADMIN: 'red', DOCTOR: 'blue', PATIENT: 'green' }
+        return <Tag color={colors[r] || 'default'}>{r}</Tag>
+      }
     },
     {
       title: t('users.joinedDate'),
       dataIndex: 'joinedDate',
       key: 'joinedDate',
-      sorter: (a, b) => new Date(a.joinedDate).getTime() - new Date(b.joinedDate).getTime(),
+      sorter: (a, b) => new Date(resolveJoined(a) || 0).getTime() - new Date(resolveJoined(b) || 0).getTime(),
+      render: (_: any, record: any) => {
+        const d = resolveJoined(record)
+        try {
+          if (!d) return '-'
+          const dt = new Date(d)
+          if (isNaN(dt.getTime())) return d
+          return dt.toLocaleDateString()
+        } catch { return d }
+      }
     },
     {
-      title: t('users.actions'),
+      title: t('users.actionsLabel') || 'Actions',
       key: 'actions',
       width: 200,
       render: (_, record) => (
@@ -158,13 +156,13 @@ export default function UsersPage() {
             <Select
               placeholder={t('users.filter')}
               style={{ width: '100%' }}
-              value={statusFilter}
-              onChange={setStatusFilter}
+              value={roleFilter}
+              onChange={setRoleFilter}
             >
               <Select.Option value="all">{t('users.all')}</Select.Option>
-              <Select.Option value="active">{t('users.active')}</Select.Option>
-              <Select.Option value="banned">{t('users.banned')}</Select.Option>
-              <Select.Option value="pending">{t('users.pending')}</Select.Option>
+              <Select.Option value="ADMIN">ADMIN</Select.Option>
+              <Select.Option value="DOCTOR">DOCTOR</Select.Option>
+              <Select.Option value="PATIENT">PATIENT</Select.Option>
             </Select>
           </Col>
         </Row>

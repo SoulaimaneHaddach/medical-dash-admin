@@ -1,7 +1,9 @@
 // pages/login.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
 import { Form, Input, Button, Card, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { authAPI } from '@/lib/api'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@/lib/i18n'
 
@@ -12,21 +14,27 @@ export default function LoginPage() {
 
   const onFinish = async (values: any) => {
     setLoading(true)
-    
+
     try {
-      // TODO: Replace with real API call
-      // const response = await authAPI.login(values.email, values.password)
-      
-      // Mock login
-      if (values.email === 'admin@hospital.com' && values.password === 'admin123') {
-        localStorage.setItem('adminToken', 'mock-token-12345')
+      const response = await authAPI.login(values.email, values.password)
+      const token = response?.data?.token || response?.data?.accessToken || response?.data?.adminToken
+
+      if (typeof token === 'string' && token.trim().length > 0) {
+        localStorage.setItem('adminToken', token)
         message.success(t('login.success'))
         router.push('/')
       } else {
+        // Backend responded but did not return a valid token
         message.error(t('login.invalid'))
       }
-    } catch (error) {
-      message.error('A login error occurred')
+    } catch (error: any) {
+      // If backend returned 401, show a clear "email or password" message
+      if (error?.response?.status === 401) {
+        message.error(t('login.invalid') || 'Email or password is wrong')
+      } else {
+        const errMsg = error?.response?.data?.message || t('login.error') || 'A login error occurred'
+        message.error(errMsg)
+      }
     } finally {
       setLoading(false)
     }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // components/ProtectedRoute.tsx
 
 import { useEffect } from 'react';
@@ -11,7 +13,7 @@ export default function ProtectedRoute({ children }: any) {
     if (!token) {
       router.push('/login');
     }
-  }, []);
+  }, [router]);
 
   return children;
 }

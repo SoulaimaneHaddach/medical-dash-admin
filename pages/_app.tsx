@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/_app.tsx
 import '@/styles/globals.css'
 import 'antd/dist/reset.css'

@@ -1,0 +1,277 @@
+openapi: 3.0.3
+info:
+  title: Medical Dashboard Admin - Minimal API
+  version: 0.1.0
+  description: Minimal OpenAPI describing the backend endpoints used by the frontend admin dashboard.
+servers:
+  - url: "{baseUrl}"
+    description: Local dev or production backend
+    variables:
+      baseUrl:
+        default: "http://localhost:3001/api"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        accessToken:
+          type: string
+        adminToken:
+          type: string
+    Doctor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        specialty:
+          type: string
+        approved:
+          type: boolean
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+        patientName:
+          type: string
+        doctorId:
+          type: string
+        time:
+          type: string
+          format: date-time
+        status:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        banned:
+          type: boolean
+    Specialty:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+paths:
+  /admin/auth/login:
+    post:
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful authentication; returns a token (one of token/accessToken/adminToken)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+  /admin/doctors:
+    get:
+      summary: List doctors
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of doctors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Doctor'
+    post:
+      summary: Create doctor
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+      responses:
+        '201':
+          description: Created
+  /admin/doctors/{id}/approve:
+    post:
+      summary: Approve a doctor
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Approved
+  /admin/doctors/{id}/reject:
+    post:
+      summary: Reject a doctor
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rejected
+  /admin/bookings:
+    get:
+      summary: List bookings
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+  /admin/bookings/{id}/confirm:
+    post:
+      summary: Confirm a booking
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Confirmed
+  /admin/bookings/{id}/cancel:
+    post:
+      summary: Cancel a booking
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cancelled
+  /admin/users:
+    get:
+      summary: List users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /admin/users/{id}/ban:
+    post:
+      summary: Ban a user
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Banned
+  /admin/users/{id}/unban:
+    post:
+      summary: Unban a user
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Unbanned
+  /admin/specialties:
+    get:
+      summary: List specialties
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of specialties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Specialty'
+    post:
+      summary: Create specialty
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Specialty'
+      responses:
+        '201':
+          description: Created
+  /admin/reports/bookings:
+    get:
+      summary: Booking stats/report
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Booking statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
