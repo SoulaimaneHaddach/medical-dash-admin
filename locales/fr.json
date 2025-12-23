@@ -153,6 +153,8 @@
     "add": "Ajouter un médecin",
     "messages": {
       "approved": "Le médecin a été approuvé",
+      "enabled": "Le compte du médecin a été activé",
+      "disabled": "Le compte du médecin a été désactivé",
       "rejected": "Le médecin a été rejeté",
       "error": "Une erreur est survenue"
     }
@@ -160,8 +162,8 @@
     "actions": {
       "approve": "Approuver",
       "reject": "Rejeter",
-      "show": "Afficher",
-      "hide": "Masquer"
+      "disable": "Désactiver",
+      "enable": "Activer"
     }
   },
   "bookings": {

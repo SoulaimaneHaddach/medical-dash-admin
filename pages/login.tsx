@@ -13,6 +13,8 @@ export default function LoginPage() {
   const { t } = useTranslation()
 
   const onFinish = async (values: any) => {
+    // Prevent duplicate submits
+    if (loading) return
     setLoading(true)
 
     try {

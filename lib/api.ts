@@ -12,7 +12,22 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 30000, // increase default timeout to 30s to reduce transient timeouts
 });
+
+// Simple retry wrapper for GET requests to handle transient timeouts
+async function safeGet(url: string, config?: any, retries = 2) {
+  try {
+    return await api.get(url, config)
+  } catch (err: any) {
+    const isTimeout = err?.code === 'ECONNABORTED' || (err?.message && String(err.message).toLowerCase().includes('timeout'))
+    if (retries > 0 && isTimeout) {
+      await new Promise((r) => setTimeout(r, 300))
+      return safeGet(url, config, retries - 1)
+    }
+    throw err
+  }
+}
 
 // Prevent repeated handling of the same 403 (multiple concurrent requests)
 
@@ -57,17 +72,24 @@ api.interceptors.response.use(
     // Log the full error to the console for debugging
     if (typeof console !== 'undefined') console.error('API error', error.response || error)
 
-    // Show error message
-    let locale: LocaleKey = 'en'
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('locale') as LocaleKey | null
-      if (stored) locale = stored
+    // Determine request URL and whether this is an auth/login request
+    const reqUrl = (error?.config && error.config.url) ? String(error.config.url) : ''
+    const skipPaths = ['/auth/login', '/admin/login', '/admin/auth/login', '/admin/admins/bootstrap', '/admin/admins/bootstrap']
+    const isAuthReq = skipPaths.some(p => reqUrl.includes(p))
+
+    // Show error message for non-auth requests only
+    if (!isAuthReq) {
+      let locale: LocaleKey = 'en'
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('locale') as LocaleKey | null
+        if (stored) locale = stored
+      }
+      // prefer server message, then axios error.message (network errors), then generic translation
+      message.error(
+        error.response?.data?.message || error.message || tSync('common.connectionError', locale)
+      );
     }
-    // prefer server message, then axios error.message (network errors), then generic translation
-    message.error(
-      error.response?.data?.message || error.message || tSync('common.connectionError', locale)
-    );
-    
+
     if (error.response?.status === 401) {
       // Redirect to login (only once)
       if (typeof window !== 'undefined') {
@@ -79,9 +101,6 @@ api.interceptors.response.use(
 
     if (error.response?.status === 403) {
       // Do not treat auth/login/bootstrap requests as global forbidden events
-      const reqUrl = error?.config?.url || ''
-      const skipPaths = ['/auth/login', '/admin/login', '/admin/auth/login', '/admin/admins/bootstrap', '/admin/admins/bootstrap']
-      const isAuthReq = skipPaths.some(p => reqUrl.includes(p))
       if (isAuthReq) {
         return Promise.reject(error)
       }
@@ -97,7 +116,7 @@ api.interceptors.response.use(
         if (typeof window !== 'undefined') {
           const cur = window.location.pathname || ''
           if (token) {
-            if (!cur.includes('/not-authorized')) window.location.href = '/not-authorized'
+            if (!cur.includes('/login')) window.location.href = '/login'
           } else {
             // if already on login, do nothing
             localStorage.removeItem('adminToken')
@@ -118,11 +137,11 @@ export const authAPI = {
     api.post('/admin/auth/login', { email, password }).catch(() =>
       api.post('/admin/login', { email, password })
     ),
-  me: () => api.get('/admin/me'),
+  me: () => safeGet('/admin/me'),
 };
 
 export const doctorsAPI = {
-  getAll: (params?: any) => api.get('/admin/doctors', { params }),
+  getAll: (params?: any) => safeGet('/admin/doctors', { params }),
   getById: (id: string) => api.get(`/admin/doctors/${id}`),
   create: (data: any) => api.post('/admin/doctors', data),
   batch: (data: any) => api.post('/admin/doctors/batch', data),
@@ -130,6 +149,8 @@ export const doctorsAPI = {
   delete: (id: string) => api.delete(`/admin/doctors/${id}`),
   approve: (id: string) => api.post(`/admin/doctors/${id}/approve`),
   reject: (id: string) => api.post(`/admin/doctors/${id}/reject`),
+  disable: (id: string) => api.post(`/admin/doctors/${id}/disable`),
+  enable: (id: string) => api.post(`/admin/doctors/${id}/enable`),
 };
 
 export const bookingsAPI = {
