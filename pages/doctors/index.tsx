@@ -12,7 +12,7 @@ export default function DoctorsPage() {
   const { t } = useTranslation()
   const router = useRouter()
 
-  const { doctors, isLoading, approve, reject, approveLoading, rejectLoading, delete: deleteDoctor, deleteLoading } = useDoctors()
+  const { doctors, isLoading, approve, reject, disable, enable, approveLoading, rejectLoading, disableLoading, enableLoading, delete: deleteDoctor, deleteLoading } = useDoctors()
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null)
 
   const columns: any = [
@@ -68,36 +68,36 @@ export default function DoctorsPage() {
           {record.status === 'active' ? (
             <Button
               danger
-              loading={actionLoadingId === record.id && rejectLoading}
+              loading={actionLoadingId === record.id && disableLoading}
               onClick={async () => {
                 try {
                   setActionLoadingId(record.id)
-                  await reject(String(record.id))
+                  await disable(String(record.id))
                 } catch (e) {
-                  if (typeof console !== 'undefined') console.error('Hide click error', e)
+                  if (typeof console !== 'undefined') console.error('Disable click error', e)
                 } finally {
                   setActionLoadingId(null)
                 }
               }}
             >
-              {t('doctors.actions.hide') || 'Hide'}
+              {t('doctors.actions.disable') || 'Disable'}
             </Button>
           ) : (
             <Button
               type="default"
-              loading={actionLoadingId === record.id && approveLoading}
+              loading={actionLoadingId === record.id && enableLoading}
               onClick={async () => {
                 try {
                   setActionLoadingId(record.id)
-                  await approve(String(record.id))
+                  await enable(String(record.id))
                 } catch (e) {
-                  if (typeof console !== 'undefined') console.error('Show click error', e)
+                  if (typeof console !== 'undefined') console.error('Enable click error', e)
                 } finally {
                   setActionLoadingId(null)
                 }
               }}
             >
-              {t('doctors.actions.show') || 'Show'}
+              {t('doctors.actions.enable') || 'Enable'}
             </Button>
           )}
 

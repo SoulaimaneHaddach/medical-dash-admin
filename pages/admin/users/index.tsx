@@ -79,7 +79,9 @@ export default function AdminUsersPage() {
 
   const openEdit = (row: any) => {
     setEditing(row)
-    form.setFieldsValue({ name: row.name, email: row.email, role: row.role })
+    // Prefill role single-select with first role if backend returns array
+    const firstRole = (row.roles && Array.isArray(row.roles) && row.roles.length > 0) ? row.roles[0] : row.role
+    form.setFieldsValue({ name: row.name, email: row.email, role: firstRole })
     setVisible(true)
   }
 
@@ -135,10 +137,16 @@ export default function AdminUsersPage() {
 
   const onFinish = async (vals: any) => {
     try {
+      // Ensure we send `roles` as an array (backend expects Set<String>)
+      const payload: any = { ...vals }
+      if (payload.role) {
+        payload.roles = Array.isArray(payload.role) ? payload.role : [payload.role]
+        delete payload.role
+      }
       if (editing) {
-        await usersAPI.update(editing.id, vals)
+        await usersAPI.update(editing.id, payload)
       } else {
-        await usersAPI.create(vals)
+        await usersAPI.create(payload)
       }
       setVisible(false)
       await load()
